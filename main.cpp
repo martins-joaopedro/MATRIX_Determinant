@@ -4,15 +4,15 @@ using namespace std;
 // Valor alterável de acordo com o tamanho máximo que uma matriz pode assumir
 const int MAX = 20;
 bool direction = false;
-int findTheBetterLine(int M[MAX][MAX], int LENGHT);
-int calculateCofator(int M[MAX][MAX], int I, int J, int LENGTH);
-int calculateDeterminant(int M[MAX][MAX], int I, int J, int LENGTH);
-int resolveDeterminant(int M[MAX][MAX], int LENGTH);
-void printMatrix(bool t, int M[MAX][MAX], int LENGTH);
+int findTheBetterLine(float M[MAX][MAX], int LENGHT);
+float calculateCofator(float M[MAX][MAX], int I, int J, int LENGTH);
+float calculateDeterminant(float M[MAX][MAX], int I, int J, int LENGTH);
+float resolveDeterminant(float M[MAX][MAX], int LENGTH);
+void printMatrix(bool t, float M[MAX][MAX], int LENGTH);
 
 int main() {
     
-    int M[MAX][MAX];
+    float M[MAX][MAX];
     int N;
     cin >> N;
 
@@ -25,7 +25,7 @@ int main() {
     return 0;
 }
 
-int findTheBetterLine(int M[MAX][MAX], int LENGHT) {
+int findTheBetterLine(float M[MAX][MAX], int LENGHT) {
     int zeros = 0;
     int bigger = 0;
     int lineNumber = 0;
@@ -64,15 +64,15 @@ int findTheBetterLine(int M[MAX][MAX], int LENGHT) {
     return lineNumber;
 }
 
-int calculateCofator(int M[MAX][MAX], int I, int J, int LENGTH) {
+float calculateCofator(float M[MAX][MAX], int I, int J, int LENGTH) {
     cout << "-> Calculando o cofator de " << M[I][J] << endl;
     return pow(-1, I+J) * calculateDeterminant(M, I, J, LENGTH);
 }
 
-int calculateDeterminant(int M[MAX][MAX], int I, int J, int LENGTH) {
+float calculateDeterminant(float M[MAX][MAX], int I, int J, int LENGTH) {
     // Gerar outra matriz e resolver o seu determinante
     int acc = 0;
-    queue<int> F;
+    queue<float> F;
     
     for(int i=0; i<LENGTH; i++) {
         for(int j=0; j<LENGTH; j++) {
@@ -84,7 +84,7 @@ int calculateDeterminant(int M[MAX][MAX], int I, int J, int LENGTH) {
     }
 
     int LENGHT = sqrt(acc);
-    int N1[MAX][MAX];
+    float N1[MAX][MAX];
 
     for(int i=0; i<LENGHT; i++)
         for(int j=0; j<LENGHT; j++) {
@@ -97,7 +97,7 @@ int calculateDeterminant(int M[MAX][MAX], int I, int J, int LENGTH) {
     return resolveDeterminant(N1, LENGHT);
 }
 
-int resolveDeterminant(int M[MAX][MAX], int LENGTH) { 
+float resolveDeterminant(float M[MAX][MAX], int LENGTH) { 
     // Caso a matrix seja uma 2x2 retorna o determinante pelo método trivial -> otimização
     if(LENGTH<=2)
         return M[0][0] * M[1][1] -(M[0][1] * M[1][0]);
@@ -106,9 +106,9 @@ int resolveDeterminant(int M[MAX][MAX], int LENGTH) {
     int lineNumber = findTheBetterLine(M, LENGTH);
     
     // Array auxiliar pra facilitar a manipulação da linha escolhida 
-    int L[LENGTH];
+    float L[LENGTH];
 
-    int det = 0;
+    float det = 0;
 
     cout << "_______________________________________" << endl;
     direction ? cout << "-> Melhor coluna encontrada: " << endl : cout << "-> Melhor linha encontrada: " << endl;
@@ -136,7 +136,7 @@ int resolveDeterminant(int M[MAX][MAX], int LENGTH) {
     return det;
 }
 
-void printMatrix(bool t, int M[MAX][MAX], int LENGTH) {
+void printMatrix(bool t, float M[MAX][MAX], int LENGTH) {
     if(t)
         cout << endl << "SUB";
     cout << "MATRIZ : " << LENGTH << " x " << LENGTH << endl;

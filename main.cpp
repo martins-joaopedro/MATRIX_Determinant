@@ -4,8 +4,8 @@ using namespace std;
 // Valor alterável de acordo com o tamanho máximo que uma matriz pode assumir
 const int MAX = 20;
 bool direction = false;
-int findTheBetterLine(float M[MAX][MAX], int LENGHT);
-float calculateCofator(float M[MAX][MAX], int I, int J, int LENGTH);
+int findBestLine(float M[MAX][MAX], int LENGHT);
+float calculateCofactor(float M[MAX][MAX], int I, int J, int LENGTH);
 float calculateDeterminant(float M[MAX][MAX], int I, int J, int LENGTH);
 float resolveDeterminant(float M[MAX][MAX], int LENGTH);
 void printMatrix(bool t, float M[MAX][MAX], int LENGTH);
@@ -25,7 +25,7 @@ int main() {
     return 0;
 }
 
-int findTheBetterLine(float M[MAX][MAX], int LENGHT) {
+int findBestLine(float M[MAX][MAX], int LENGHT) {
     int zeros = 0;
     int bigger = 0;
     int lineNumber = 0;
@@ -64,7 +64,7 @@ int findTheBetterLine(float M[MAX][MAX], int LENGHT) {
     return lineNumber;
 }
 
-float calculateCofator(float M[MAX][MAX], int I, int J, int LENGTH) {
+float calculateCofactor(float M[MAX][MAX], int I, int J, int LENGTH) {
     cout << "-> Calculando o cofator de " << M[I][J] << endl;
     return pow(-1, I+J) * calculateDeterminant(M, I, J, LENGTH);
 }
@@ -103,18 +103,19 @@ float resolveDeterminant(float M[MAX][MAX], int LENGTH) {
         return M[0][0] * M[1][1] -(M[0][1] * M[1][0]);
     
     // Encontro a melhor linha (ou coluna) para encontrar o determinante através dos cofatores
-    int lineNumber = findTheBetterLine(M, LENGTH);
-    
+    int lineNumber = findBestLine(M, LENGTH);
+    bool saveDirection = direction;
+
     // Array auxiliar pra facilitar a manipulação da linha escolhida 
     float L[LENGTH];
 
-    float det = 0;
+    long double det = 0;
 
     cout << "_______________________________________" << endl;
-    direction ? cout << "-> Melhor coluna encontrada: " << endl : cout << "-> Melhor linha encontrada: " << endl;
+    saveDirection ? cout << "-> Melhor coluna encontrada: " << endl : cout << "-> Melhor linha encontrada: " << endl;
   
     for(int i=0; i<LENGTH; i++) {
-        if(direction) {
+        if(saveDirection) {
             cout << M[i][lineNumber] << endl;
             L[i] = M[i][lineNumber];
         }
@@ -127,9 +128,9 @@ float resolveDeterminant(float M[MAX][MAX], int LENGTH) {
     for(int i=0; i<LENGTH; i++) {
         // So determina o cofator para elementos que são diferentes de 0
         if(L[i])
-            if(direction)
-                det += L[i] * calculateCofator(M, i, lineNumber, LENGTH);
-            else det += L[i] * calculateCofator(M, lineNumber, i, LENGTH);
+            if(saveDirection)
+                det += L[i] * calculateCofactor(M, i, lineNumber, LENGTH);
+            else det += L[i] * calculateCofactor(M, lineNumber, i, LENGTH);
         else cout << "-> Cofator de 0 => 0" << endl;
     }
 
